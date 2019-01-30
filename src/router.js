@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import home from './views/home.vue'
 import my from './views/my.vue'
 import login from './views/login.vue'
+import admin from './views/admin.vue'
+import activities from './views/activities.vue'
 import error404 from './views/error404.vue'
 import store from './store'
 
@@ -36,6 +38,16 @@ export default new Router({
         }
         return next()
       }
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: admin
+    },
+    {
+      path: '/activities',
+      name: 'activities',
+      component: activities
     },
     {
       path: '*',
