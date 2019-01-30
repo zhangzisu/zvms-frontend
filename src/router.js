@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import home from './views/home.vue'
+import my from './views/my.vue'
+import login from './views/login.vue'
+import error404 from './views/error404.vue'
+import store from './store'
 
 Vue.use(Router)
 
@@ -9,15 +13,34 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: home
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      path: '/my',
+      name: 'my',
+      component: my,
+      beforeEnter: (to, from, next) => {
+        if (store.state.token) {
+          return next()
+        }
+        return next('login')
+      }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: login,
+      beforeEnter: (to, from, next) => {
+        if (store.state.token) {
+          return next(false)
+        }
+        return next()
+      }
+    },
+    {
+      path: '*',
+      name: 'error404',
+      component: error404
     }
   ]
 })
