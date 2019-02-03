@@ -5,12 +5,12 @@
         <v-card>
           <v-card-title class="headline primary white--text">登录</v-card-title>
           <v-card-text>
-            <v-text-field type="number" v-model="uid" label="用户ID"/>
+            <v-text-field type="number" v-model.number="uid" label="用户ID"/>
             <v-text-field type="password" v-model="pass" label="密码"/>
           </v-card-text>
           <v-card-actions>
             <v-spacer/>
-            <v-btn color="primary" :loading="loading" @click="login">提交</v-btn>
+            <v-btn color="primary" :loading="$store.state.loading" @click="login">提交</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -25,15 +25,13 @@ export default {
   name: 'login',
   data: () => ({
     uid: undefined,
-    pass: undefined,
-    loading: false
+    pass: undefined
   }),
   methods: {
     async login () {
-      this.loading = true
       this.$store.commit('loading', true)
       const form = {
-        id: parseInt(this.uid),
+        id: this.uid,
         password: this.pass
       }
       try {
@@ -49,7 +47,6 @@ export default {
       } catch (err) {
         console.log(err)
       } finally {
-        this.loading = false
         this.$store.commit('loading', false)
       }
     }

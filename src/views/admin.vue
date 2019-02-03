@@ -8,10 +8,8 @@
             <v-tab :key="1">系统管理</v-tab>
           </v-tabs>
           <v-tabs-items v-model="tab">
-            <v-tab-item :key="0">
-            </v-tab-item>
-            <v-tab-item :key="1">
-            </v-tab-item>
+            <v-tab-item :key="0"></v-tab-item>
+            <v-tab-item :key="1"></v-tab-item>
           </v-tabs-items>
         </v-card>
       </v-flex>

@@ -13,6 +13,14 @@
           <v-card>
             <v-card-title class="headline">义工活动</v-card-title>
             <v-data-table :headers="chanceHeaders" :items="info.chances">
+              <template slot="items" slot-scope="props">
+                <tr @click="props.expanded = !props.expanded">
+                  <td>{{ props.item.id }}</td>
+                  <td>{{ props.item.quota }}</td>
+                  <td>{{ props.item.isPublic }}</td>
+                  <td>{{ props.item.activityId }}</td>
+                </tr>
+              </template>
             </v-data-table>
           </v-card>
         </v-flex>
@@ -29,7 +37,7 @@
                 </tr>
               </template>
               <template slot="expand" slot-scope="{ item }">
-                <userinfo :profile="item"/>
+                <userinfo :info="item"/>
               </template>
             </v-data-table>
           </v-card>
@@ -54,7 +62,10 @@ export default {
       { text: '用户名', value: 'name', align: 'right' }
     ],
     chanceHeaders: [
-      { text: 'CID', value: 'id', align: 'left' }
+      { text: 'CID', value: 'id' },
+      { text: '剩余人数', value: 'quota' },
+      { text: '公开', valus: 'isPublic' },
+      { text: '活动', value: 'activityId' }
     ]
   })
 }

@@ -2,14 +2,14 @@
   <v-container fluid>
     <v-layout fill-height>
       <v-flex xs12>
-        <v-card>
+        <v-card flat>
           <v-tabs v-model="tab" centered grow>
             <v-tab :key="0">我的</v-tab>
             <v-tab :key="1">班级</v-tab>
           </v-tabs>
           <v-tabs-items v-model="tab">
             <v-tab-item :key="0">
-              <userinfo :profile="$store.state.profile" show-history/>
+              <userinfo :info="$store.state.profile" show-history/>
             </v-tab-item>
             <v-tab-item :key="1" v-if="!!classInfo">
               <groupinfo :info="classInfo"/>

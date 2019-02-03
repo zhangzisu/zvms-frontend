@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import home from './views/home.vue'
-import my from './views/my.vue'
-import login from './views/login.vue'
-import admin from './views/admin.vue'
-import activities from './views/activities.vue'
-import error404 from './views/error404.vue'
+import home from '../views/home.vue'
+import my from '../views/my.vue'
+import login from '../views/login.vue'
+import admin from '../views/admin.vue'
+import error404 from '../views/error404.vue'
+import * as activity from '../views/activity'
 import store from './store'
 
 Vue.use(Router)
@@ -47,7 +47,16 @@ export default new Router({
     {
       path: '/activities',
       name: 'activities',
-      component: activities
+      component: activity.list
+    },
+    {
+      path: '/activities/create',
+      component: activity.create
+    },
+    {
+      path: '/activities/show/:id',
+      component: activity.show,
+      props: true
     },
     {
       path: '*',
