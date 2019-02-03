@@ -1,0 +1,9 @@
+{
+    "tslint.autoFixOnSave": true,
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "git.autofetch": true,
+    "vetur.format.defaultFormatter.js": "vscode-typescript",
+    "vetur.format.defaultFormatter.ts": "vscode-typescript",
+    "breadcrumbs.enabled": true
+}
