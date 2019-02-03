@@ -1,5 +1,5 @@
 <template>
-  <v-card flat>
+  <v-card class="grey lighten-3" flat>
     <!-- TODO: 修改机会,先咕着 -->
     <v-card-actions>
       <v-spacer/>
@@ -20,7 +20,7 @@ export default {
       try {
         const { data: { s, p } } = await Axios.delete(`/activities/${this.id}/chances/${this.item.id}`)
         if (s !== 0) throw new Error(p)
-        this.$emit('remove')
+        this.$emit('updated')
       } catch (e) {
         console.log(e)
       } finally {

@@ -9,7 +9,7 @@
       </tr>
     </template>
     <template slot="expand" slot-scope="{ item }">
-      <chance-item :id="id" :item="item" @remove="load"/>
+      <chance-item :id="id" :item="item" @updated="load"/>
     </template>
     <template slot="footer" v-if="$store.state.profile.isAdministrator">
       <v-menu v-model="addMenu" :close-on-content-click="false" :nudge-width="200">
@@ -44,8 +44,8 @@ export default {
     headers: [
       { text: 'CID', value: 'id' },
       { text: '剩余人数', value: 'quota' },
-      { text: '公开', valus: 'isPublic' },
-      { text: 'GID', valus: 'groupId' }
+      { text: '公开', value: 'isPublic' },
+      { text: 'GID', value: 'groupId' }
     ],
     addMenu: false,
     addForm: {

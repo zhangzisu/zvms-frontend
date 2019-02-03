@@ -1,9 +1,9 @@
 <template>
-  <v-card flat>
+  <v-card flat class="transparent">
     <v-container fluid grid-list-md>
       <v-layout row>
         <v-flex xs3>
-          <v-card>
+          <v-card class="fill-height">
             <v-card-text>
               <v-avatar tile size="100%">
                 <img :src="avatarUrl">
@@ -19,7 +19,7 @@
           </v-card>
         </v-flex>
         <v-flex xs9>
-          <v-card>
+          <v-card class="fill-height">
             <v-card-title class="headline">{{ info.name }}</v-card-title>
             <v-card-text>
               <v-list dense>

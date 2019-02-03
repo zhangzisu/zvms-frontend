@@ -7,7 +7,7 @@
       </tr>
     </template>
     <template slot="expand" slot-scope="{ item }">
-      <team-item :id="id" :item="item" @remove="load"/>
+      <team-item :id="id" :item="item" @updated="load"/>
     </template>
     <template slot="footer">
       <v-menu v-model="addMenu" :close-on-content-click="false" :nudge-width="200">
@@ -38,8 +38,8 @@ export default {
   props: ['id', 'items'],
   data: () => ({
     headers: [
-      { text: 'TID', valus: 'id' },
-      { text: '队长UID', valus: 'leaderId' }
+      { text: 'TID', value: 'id' },
+      { text: '队长UID', value: 'leaderId' }
     ],
     addMenu: false,
     addForm: {

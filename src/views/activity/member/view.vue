@@ -13,7 +13,10 @@
         <td>{{ props.item.administratorReview }}</td>
       </tr>
     </template>
-    <template slot="footer">
+    <template slot="expand" slot-scope="{item}">
+      <member-item :id="id" :item="item" :updated="load" :no-action="noAction"/>
+    </template>
+    <template slot="footer" v-if="noAction === undefined">
       <v-menu v-model="addMenu" :close-on-content-click="false" :nudge-width="200">
         <v-btn color="primary" slot="activator" depressed>新建参加者</v-btn>
         <v-card>
@@ -33,10 +36,14 @@
 
 <script>
 import Axios from 'axios'
+import memberItem from './item.vue'
 
 export default {
   name: 'memberView',
-  props: ['id', 'items'],
+  components: {
+    memberItem
+  },
+  props: ['id', 'items', 'noAction'],
   data: () => ({
     headers: [
       { text: 'MID', value: 'id' },
@@ -62,6 +69,7 @@ export default {
         const { data: { s, p } } = await Axios.post(`/activities/${this.id}/members`, this.addForm)
         if (s !== 0) throw new Error(p)
         await this.load()
+        this.$emit('updated')
       } catch (err) {
         console.log(err)
       } finally {
@@ -74,6 +82,7 @@ export default {
         const { data: { s, p } } = await Axios.get(`/activities/${this.id}/members`)
         if (s !== 0) throw new Error(p)
         this.$emit('update:items', p)
+        this.$emit('updated')
       } catch (err) {
         console.log(err)
       } finally {

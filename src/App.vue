@@ -30,6 +30,12 @@
     <v-content>
       <router-view/>
     </v-content>
+    <v-footer app inset height="auto">
+      <v-card class="flex" flat tile>
+        <v-card-actions class="justify-center"><a href="https://github.com/ZhangZisu/zvms-frontend">Open source project</a> - &copy;2019&nbsp;<strong>ZhangZisu</strong>
+        </v-card-actions>
+      </v-card>
+    </v-footer>
   </v-app>
 </template>
 
