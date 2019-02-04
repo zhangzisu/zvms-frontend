@@ -8,15 +8,15 @@
         <td>{{ props.item.iTime }}</td>
         <td>{{ props.item.oTime }}</td>
         <td>{{ props.item.uTime }}</td>
-        <td>{{ props.item.leaderReview }}</td>
-        <td>{{ props.item.managerReview }}</td>
-        <td>{{ props.item.administratorReview }}</td>
+        <td>{{ props.item.isLeaderApproved }}</td>
+        <td>{{ props.item.isManagerApproved }}</td>
+        <td>{{ props.item.isAdminApproved }}</td>
       </tr>
     </template>
     <template slot="expand" slot-scope="{item}">
-      <member-item :id="id" :item="item" :updated="load" :no-action="noAction"/>
+      <member-item :id="id" :item="item" :updated="load" :state="state" :no-action="noAction"/>
     </template>
-    <template slot="footer" v-if="noAction === undefined">
+    <template slot="footer" v-if="state === 2 && noAction === undefined">
       <v-menu v-model="addMenu" :close-on-content-click="false" :nudge-width="200">
         <v-btn color="primary" slot="activator" depressed>新建参加者</v-btn>
         <v-card>
@@ -43,7 +43,7 @@ export default {
   components: {
     memberItem
   },
-  props: ['id', 'items', 'noAction'],
+  props: ['id', 'items', 'noAction', 'state'],
   data: () => ({
     headers: [
       { text: 'MID', value: 'id' },
@@ -52,9 +52,9 @@ export default {
       { text: '校内时间', value: 'iTime' },
       { text: '校外时间', value: 'oTime' },
       { text: '通用时间', value: 'uTime' },
-      { text: '队长意见', value: 'leaderReview' },
-      { text: '学生会意见', value: 'managerReview' },
-      { text: '义管会意见', value: 'administratorReview' }
+      { text: '队长批准', value: 'isLeaderApproved' },
+      { text: '学生会批准', value: 'isManagerApproved' },
+      { text: '义管会批准', value: 'isAdminApproved' }
     ],
     addMenu: false,
     addForm: {
@@ -77,6 +77,7 @@ export default {
       }
     },
     async load () {
+      this.addMenu = false
       this.$store.commit('loading', true)
       try {
         const { data: { s, p } } = await Axios.get(`/activities/${this.id}/members`)

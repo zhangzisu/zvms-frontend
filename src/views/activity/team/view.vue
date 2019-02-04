@@ -7,7 +7,7 @@
       </tr>
     </template>
     <template slot="expand" slot-scope="{ item }">
-      <team-item :id="id" :item="item" @updated="load"/>
+      <team-item :id="id" :item="item" :state="state" @updated="load"/>
     </template>
     <template slot="footer">
       <v-menu v-model="addMenu" :close-on-content-click="false" :nudge-width="200">
@@ -35,7 +35,7 @@ export default {
   components: {
     teamItem
   },
-  props: ['id', 'items'],
+  props: ['id', 'items', 'state'],
   data: () => ({
     headers: [
       { text: 'TID', value: 'id' },

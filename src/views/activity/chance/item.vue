@@ -13,7 +13,7 @@ import Axios from 'axios'
 
 export default {
   name: 'chanceItem',
-  props: ['id', 'item'],
+  props: ['id', 'item', 'state'],
   methods: {
     async remove () {
       this.$store.commit('loading', true)

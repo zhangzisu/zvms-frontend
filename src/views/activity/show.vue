@@ -20,7 +20,13 @@
             <v-card-actions>
               <v-spacer/>
               <v-btn @click="load" depressed color="warning">重置</v-btn>
-              <v-btn @click="submit" :loading="$store.state.loading" :disabled="!valid" depressed color="primary">提交</v-btn>
+              <v-btn
+                @click="submit"
+                :loading="$store.state.loading"
+                :disabled="!valid"
+                depressed
+                color="primary"
+              >提交</v-btn>
             </v-card-actions>
           </v-card>
         </v-form>
@@ -44,20 +50,20 @@
             <v-tab :key="0">报名控制</v-tab>
             <v-tab :key="1">分队信息</v-tab>
             <v-tab :key="2">人员管理</v-tab>
-            <v-tab :key="3">批量操作</v-tab>
+            <v-tab :key="3" v-if="item.state === 3">批量操作</v-tab>
           </v-tabs>
           <v-tabs-items v-model="tab">
             <v-tab-item :key="0">
-              <chance-view :id="id" :items.sync="item.chances" ref="chance"/>
+              <chance-view :id="id" :items.sync="item.chances" :state="item.state" ref="chance"/>
             </v-tab-item>
             <v-tab-item :key="1">
-              <team-view :id="id" :items.sync="item.teams" ref="team"/>
+              <team-view :id="id" :items.sync="item.teams" :state="item.state" ref="team"/>
             </v-tab-item>
             <v-tab-item :key="2">
-              <member-view :id="id" :items.sync="item.members" ref="member" @updated="onUpdated"/>
+              <member-view :id="id" :items.sync="item.members" :state="item.state" ref="member" @updated="updateChances"/>
             </v-tab-item>
-            <v-tab-item :key="3">
-              <strong>Coming soon!!!</strong>
+            <v-tab-item :key="3" v-if="item.state === 3">
+              <batch :id="id" @updated="updateMembers"/>
             </v-tab-item>
           </v-tabs-items>
         </v-card>
@@ -81,13 +87,15 @@ import userInfo from '../../components/userinfo.vue'
 import chanceView from './chance/view.vue'
 import teamView from './team/view.vue'
 import memberView from './member/view.vue'
+import batch from './batch.vue'
 
 export default {
   components: {
     userInfo,
     chanceView,
     teamView,
-    memberView
+    memberView,
+    batch
   },
   props: ['id'],
   data: () => ({
@@ -158,8 +166,11 @@ export default {
         this.$store.commit('loading', false)
       }
     },
-    onUpdated () {
+    updateChances () {
       this.$refs.chance.load()
+    },
+    updateMembers () {
+      this.$refs.member.load()
     }
   }
 }

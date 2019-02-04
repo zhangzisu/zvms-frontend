@@ -9,9 +9,9 @@
       </tr>
     </template>
     <template slot="expand" slot-scope="{ item }">
-      <chance-item :id="id" :item="item" @updated="load"/>
+      <chance-item :id="id" :item="item" @updated="load" :state="state"/>
     </template>
-    <template slot="footer" v-if="$store.state.profile.isAdministrator">
+    <template slot="footer" v-if="$store.state.profile.isAdmin && state === 1">
       <v-menu v-model="addMenu" :close-on-content-click="false" :nudge-width="200">
         <v-btn slot="activator" depressed color="primary">新建分配</v-btn>
         <v-card>
@@ -39,7 +39,7 @@ export default {
   components: {
     chanceItem
   },
-  props: ['id', 'items'],
+  props: ['id', 'items', 'state'],
   data: () => ({
     headers: [
       { text: 'CID', value: 'id' },

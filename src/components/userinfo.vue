@@ -10,7 +10,7 @@
               </v-avatar>
             </v-card-text>
             <v-card-text>
-              <v-chip v-if="info.isAdministrator">管理员</v-chip>
+              <v-chip v-if="info.isAdmin">管理员</v-chip>
               <v-chip v-if="info.isManager">学生部</v-chip>
               <v-chip v-if="info.isSecretary">团支书</v-chip>
               <v-chip v-if="info.isProvider">义工提供方</v-chip>

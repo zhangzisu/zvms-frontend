@@ -17,6 +17,9 @@ export default new Vuex.Store({
     },
     token: (state, payload) => {
       Axios.defaults.headers['x-access-token'] = state.token = payload
+      if (!payload) {
+        delete Axios.defaults.headers['x-access-token']
+      }
     },
     loading: (state, payload) => {
       state.isLoading = payload

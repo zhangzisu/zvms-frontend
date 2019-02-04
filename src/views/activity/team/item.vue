@@ -20,10 +20,10 @@
         </v-tabs>
         <v-tabs-items v-model="tab">
           <v-tab-item :key="0">
-            <strong>Coming soon!!!</strong>
+            <batch :id="id" :tid="item.id" @updated="load"/>
           </v-tab-item>
           <v-tab-item :key="1" v-if="!!extra">
-            <member-view :id="id" :items="extra.members" no-action/>
+            <member-view :id="id" :items="extra.members" :state="state" no-action/>
           </v-tab-item>
           <v-tab-item :key="2" v-if="!!extra">
             <user-info :info="extra.leader"/>
@@ -38,13 +38,15 @@
 import Axios from 'axios'
 import userInfo from '../../../components/userinfo.vue'
 import memberView from '../member/view.vue'
+import batch from '../batch.vue'
 
 export default {
   name: 'teamItem',
-  props: ['id', 'item'],
+  props: ['id', 'item', 'state'],
   components: {
     userInfo,
-    memberView
+    memberView,
+    batch
   },
   data: () => ({
     extra: undefined,
