@@ -3,7 +3,13 @@
     <v-layout fill-height>
       <v-flex xs12>
         <v-card>
-          <v-data-table :headers="headers" :items="items">
+          <v-data-table
+            :rows-per-page-items="[5, 10, 15, 25, 50]"
+            :headers="headers"
+            :items="items"
+            :pagination.sync="pagination"
+            :loading="$store.state.loading"
+          >
             <template slot="items" slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
                 <td>{{ props.item.id }}</td>
@@ -68,20 +74,38 @@ export default {
       '报名中',
       '等待核查',
       '完成'
-    ]
+    ],
+    pagination: {
+      descending: undefined,
+      page: 1,
+      rowsPerPage: 15,
+      sortBy: undefined,
+      totalItems: 0
+    }
   }),
-  async created () {
-    this.$store.commit('loading', true)
-    try {
-      const {
-        data: { s, p }
-      } = await Axios.get('/activities')
-      if (s !== 0) throw new Error(p)
-      this.items = p
-    } catch (err) {
-      dialogs.toasts.error(err)
-    } finally {
-      this.$store.commit('loading', false)
+  watch: {
+    pagination: {
+      handler () {
+        this.load()
+      },
+      deep: true,
+      immediate: true
+    }
+  },
+  methods: {
+    async load () {
+      this.$store.commit('loading', true)
+      try {
+        const {
+          data: { s, p }
+        } = await Axios.get('/activities', { params: this.pagination })
+        if (s !== 0) throw new Error(p);
+        [this.items, this.pagination.totalItems] = p
+      } catch (err) {
+        dialogs.toasts.error(err)
+      } finally {
+        this.$store.commit('loading', false)
+      }
     }
   }
 }
