@@ -60,7 +60,13 @@
               <team-view :id="id" :items.sync="item.teams" :state="item.state" ref="team"/>
             </v-tab-item>
             <v-tab-item :key="2">
-              <member-view :id="id" :items.sync="item.members" :state="item.state" ref="member" @updated="updateChances"/>
+              <member-view
+                :id="id"
+                :items.sync="item.members"
+                :state="item.state"
+                ref="member"
+                @updated="updateChances"
+              />
             </v-tab-item>
             <v-tab-item :key="3" v-if="item.state === 3">
               <batch :id="id" @updated="updateMembers"/>
@@ -82,6 +88,7 @@
 
 <script>
 import Axios from 'axios'
+import dialogs from '../../utils/dialogs'
 import { V_NOT_EMPTY } from '../../utils/validation'
 import userInfo from '../../components/userinfo.vue'
 import chanceView from './chance/view.vue'
@@ -134,7 +141,7 @@ export default {
         if (s !== 0) throw new Error(p)
         this.item = p
       } catch (err) {
-        console.log(err)
+        dialogs.toasts.error(err)
       } finally {
         this.$store.commit('loading', false)
       }
@@ -148,22 +155,24 @@ export default {
         if (s !== 0) throw new Error(p)
         await this.load()
       } catch (err) {
-        console.log(err)
+        dialogs.toasts.error(err)
       } finally {
         this.$store.commit('loading', false)
       }
     },
     async changeState () {
-      this.$store.commit('loading', true)
-      const form = { name: this.name, description: this.description }
-      try {
-        const { data: { s, p } } = await Axios.post(`/activities/${this.id}/changestate`, form)
-        if (s !== 0) throw new Error(p)
-        await this.load()
-      } catch (err) {
-        console.log(err)
-      } finally {
-        this.$store.commit('loading', false)
+      if (await dialogs.confirm('该操作无法撤销！责任自负！')) {
+        this.$store.commit('loading', true)
+        const form = { name: this.name, description: this.description }
+        try {
+          const { data: { s, p } } = await Axios.post(`/activities/${this.id}/changestate`, form)
+          if (s !== 0) throw new Error(p)
+          await this.load()
+        } catch (err) {
+          dialogs.toasts.error(err)
+        } finally {
+          this.$store.commit('loading', false)
+        }
       }
     },
     updateChances () {

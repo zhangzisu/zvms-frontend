@@ -20,6 +20,7 @@
 
 <script>
 import Axios from 'axios'
+import dialogs from '../../utils/dialogs'
 
 export default {
   name: 'batch',
@@ -44,7 +45,7 @@ export default {
         if (s !== 0) throw new Error(p)
         this.$emit('updated')
       } catch (err) {
-        console.log(err)
+        dialogs.toasts.error(err)
       } finally {
         this.$store.commit('loading', false)
       }

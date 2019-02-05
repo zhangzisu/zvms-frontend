@@ -16,7 +16,9 @@
                 <v-layout row>
                   <v-flex xs3>
                     <v-card>
-                      <v-card-text class="display-3 font-weight-thin text-xs-center">#{{ props.item.id }}</v-card-text>
+                      <v-card-text
+                        class="display-3 font-weight-thin text-xs-center"
+                      >#{{ props.item.id }}</v-card-text>
                       <v-card-text>
                         <v-chip>{{ status[props.item.state] }}</v-chip>
                         <v-chip>{{ props.item.isComputed ? '已生效' : '未生效' }}</v-chip>
@@ -50,6 +52,7 @@
 
 <script>
 import Axios from 'axios'
+import dialogs from '../../utils/dialogs'
 
 export default {
   data: () => ({
@@ -75,8 +78,8 @@ export default {
       } = await Axios.get('/activities')
       if (s !== 0) throw new Error(p)
       this.items = p
-    } catch (e) {
-      console.log(e)
+    } catch (err) {
+      dialogs.toasts.error(err)
     } finally {
       this.$store.commit('loading', false)
     }

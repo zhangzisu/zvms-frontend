@@ -27,6 +27,7 @@
 
 <script>
 import Axios from 'axios'
+import dialogs from '../../utils/dialogs'
 import { V_NOT_EMPTY } from '../../utils/validation'
 
 export default {
@@ -52,7 +53,7 @@ export default {
         if (s !== 0) throw new Error(p)
         this.$router.push(`/activities/show/${p}`)
       } catch (err) {
-        console.log(err)
+        dialogs.toasts.error(err)
       } finally {
         this.$store.commit('loading', false)
       }

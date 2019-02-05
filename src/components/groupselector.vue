@@ -23,6 +23,7 @@
 
 <script>
 import Axios from 'axios'
+import dialogs from '../utils/dialogs'
 
 export default {
   name: 'groupSelector',
@@ -59,7 +60,7 @@ export default {
         if (s !== 0) throw new Error(p)
         this.items = p
       } catch (err) {
-        console.log(err)
+        dialogs.toasts.error(err)
       } finally {
         this.$store.commit('loading', false)
       }

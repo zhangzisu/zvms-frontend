@@ -14,12 +14,12 @@
     <v-card-text>
       <v-card>
         <v-tabs v-model="tab" centered grow>
-          <v-tab :key="0">成员批量操作</v-tab>
+          <v-tab :key="0" v-if="state === 3">成员批量操作</v-tab>
           <v-tab :key="1" v-if="!!extra">成员信息</v-tab>
           <v-tab :key="2" v-if="!!extra">组长信息</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
-          <v-tab-item :key="0">
+          <v-tab-item :key="0" v-if="state === 3">
             <batch :id="id" :tid="item.id" @updated="load"/>
           </v-tab-item>
           <v-tab-item :key="1" v-if="!!extra">
@@ -36,6 +36,7 @@
 
 <script>
 import Axios from 'axios'
+import dialogs from '../../../utils/dialogs'
 import userInfo from '../../../components/userinfo.vue'
 import memberView from '../member/view.vue'
 import batch from '../batch.vue'
@@ -59,8 +60,8 @@ export default {
         const { data: { s, p } } = await Axios.delete(`/activities/${this.id}/teams/${this.item.id}`)
         if (s !== 0) throw new Error(p)
         this.$emit('updated')
-      } catch (e) {
-        console.log(e)
+      } catch (err) {
+        dialogs.toasts.error(err)
       } finally {
         this.$store.commit('loading', false)
       }
@@ -72,7 +73,7 @@ export default {
         if (s !== 0) throw new Error(p)
         this.extra = p
       } catch (err) {
-        console.log(err)
+        dialogs.toasts.error(err)
       } finally {
         this.$store.commit('loading', false)
       }

@@ -20,6 +20,7 @@
 
 <script>
 import Axios from 'axios'
+import dialogs from '../utils/dialogs'
 
 export default {
   name: 'login',
@@ -42,10 +43,10 @@ export default {
         ({ data: { s, p } } = await Axios.get('/users/' + form.id))
         if (s !== 0) throw new Error(p)
         this.$store.commit('profile', p)
-        console.log('Login succeeded')
+        dialogs.toasts.success('Login succeeded')
         this.$router.push('my')
       } catch (err) {
-        console.log(err)
+        dialogs.toasts.error(err)
       } finally {
         this.$store.commit('loading', false)
       }

@@ -32,6 +32,7 @@
 
 <script>
 import Axios from 'axios'
+import dialogs from '../../../utils/dialogs'
 import chanceItem from './item.vue'
 
 export default {
@@ -63,7 +64,7 @@ export default {
         if (s !== 0) throw new Error(p)
         await this.load()
       } catch (err) {
-        console.log(err)
+        dialogs.toasts.error(err)
       } finally {
         this.$store.commit('loading', false)
       }
@@ -75,7 +76,7 @@ export default {
         if (s !== 0) throw new Error(p)
         this.$emit('update:items', p)
       } catch (err) {
-        console.log(err)
+        dialogs.toasts.error(err)
       } finally {
         this.$store.commit('loading', false)
       }

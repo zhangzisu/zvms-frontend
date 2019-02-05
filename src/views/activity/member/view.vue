@@ -36,6 +36,7 @@
 
 <script>
 import Axios from 'axios'
+import dialogs from '../../../utils/dialogs'
 import memberItem from './item.vue'
 
 export default {
@@ -71,7 +72,7 @@ export default {
         await this.load()
         this.$emit('updated')
       } catch (err) {
-        console.log(err)
+        dialogs.toasts.error(err)
       } finally {
         this.$store.commit('loading', false)
       }
@@ -85,7 +86,7 @@ export default {
         this.$emit('update:items', p)
         this.$emit('updated')
       } catch (err) {
-        console.log(err)
+        dialogs.toasts.error(err)
       } finally {
         this.$store.commit('loading', false)
       }

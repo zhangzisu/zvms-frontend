@@ -9,7 +9,7 @@
     <template slot="expand" slot-scope="{ item }">
       <team-item :id="id" :item="item" :state="state" @updated="load"/>
     </template>
-    <template slot="footer">
+    <template slot="footer" v-if="state === 2">
       <v-menu v-model="addMenu" :close-on-content-click="false" :nudge-width="200">
         <v-btn slot="activator" depressed color="primary">新建小队</v-btn>
         <v-card>
@@ -28,6 +28,7 @@
 
 <script>
 import Axios from 'axios'
+import dialogs from '../../../utils/dialogs'
 import teamItem from './item.vue'
 
 export default {
@@ -55,7 +56,7 @@ export default {
         if (s !== 0) throw new Error(p)
         await this.load()
       } catch (err) {
-        console.log(err)
+        dialogs.err(err)
       } finally {
         this.$store.commit('loading', false)
       }
@@ -67,7 +68,7 @@ export default {
         if (s !== 0) throw new Error(p)
         this.$emit('update:items', p)
       } catch (err) {
-        console.log(err)
+        dialogs.err(err)
       } finally {
         this.$store.commit('loading', false)
       }

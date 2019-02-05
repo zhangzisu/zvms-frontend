@@ -23,6 +23,7 @@
 
 <script>
 import Axios from 'axios'
+import dialogs from '../utils/dialogs'
 import userinfo from '../components/userinfo.vue'
 import groupinfo from '../components/groupinfo.vue'
 
@@ -43,7 +44,7 @@ export default {
       if (s !== 0) throw new Error(p)
       this.$store.commit('profile', p)
     } catch (err) {
-      console.log(err)
+      dialogs.toasts.error(err)
     } finally {
       this.$store.commit('loading', false)
     }
@@ -66,7 +67,7 @@ export default {
         this.classInfo = p
         this.tab = 1
       } catch (err) {
-        console.log(err)
+        dialogs.toasts.error(err)
       } finally {
         this.$store.commit('loading', false)
       }

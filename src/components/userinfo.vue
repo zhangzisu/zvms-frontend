@@ -45,7 +45,9 @@
                 </v-list-tile>
               </v-list>
             </v-card-text>
-            <v-card-text>{{ info.description }}</v-card-text>
+            <v-card-text>
+              <pre>{{ info.description }}</pre>
+            </v-card-text>
           </v-card>
         </v-flex>
       </v-layout>
