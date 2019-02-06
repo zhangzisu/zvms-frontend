@@ -5,8 +5,9 @@
         <v-card class="fill-height">
           <v-card-text class="display-3 font-weight-thin text-xs-center">#{{ item.id }}</v-card-text>
           <v-card-text>
-            <v-chip>{{ status[item.state] }}</v-chip>
-            <v-chip>{{ item.isComputed ? '已生效' : '未生效' }}</v-chip>
+            <v-chip label>{{ status[item.state] }}</v-chip>
+            <v-chip label>{{ item.isComputed ? '已生效' : '未生效' }}</v-chip>
+            <v-chip label>{{ item.isPublic ? '校外' : '校内' }}</v-chip>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -20,25 +21,19 @@
             <v-card-actions>
               <v-spacer/>
               <v-btn @click="load" depressed color="warning">重置</v-btn>
-              <v-btn
-                @click="submit"
-                :loading="$store.state.loading"
-                :disabled="!valid"
-                depressed
-                color="primary"
-              >提交</v-btn>
+              <v-btn @click="submit" :loading="$store.state.loading" :disabled="!valid" depressed color="primary">提交</v-btn>
             </v-card-actions>
           </v-card>
         </v-form>
-        <v-card v-else>
+        <v-card v-else class="fill-height">
           <v-card-title class="headline">{{ item.name }}</v-card-title>
           <v-card-text>
             <pre>{{ item.description }}</pre>
           </v-card-text>
           <v-card-actions>
             <v-spacer/>
-            <v-btn color="primary" @click="showEdit = !showEdit" depressed>编辑</v-btn>
-            <v-btn color="accent" @click="changeState" depressed>更改状态</v-btn>
+            <v-btn color="primary" @click="showEdit = !showEdit" depressed v-if="profile.isAdmin || (profile.isProvider && profile.id === item.ownerId)">编辑</v-btn>
+            <v-btn color="accent" @click="changeState" depressed :disabled="item.state === 4" v-if="profile.isAdmin">更改状态</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -50,7 +45,10 @@
             <v-tab :key="0">报名控制</v-tab>
             <v-tab :key="1">分队信息</v-tab>
             <v-tab :key="2">人员管理</v-tab>
-            <v-tab :key="3" v-if="item.state === 3">批量操作</v-tab>
+            <v-tab :key="3" v-if="!!myself">我的义工</v-tab>
+            <v-tab :key="4" v-if="item.state === 3">批量操作</v-tab>
+            <v-tab :key="5">媒体资料</v-tab>
+            <v-tab :key="6">资料上传</v-tab>
           </v-tabs>
           <v-tabs-items v-model="tab">
             <v-tab-item :key="0">
@@ -60,16 +58,27 @@
               <team-view :id="id" :items.sync="item.teams" :state="item.state" ref="team"/>
             </v-tab-item>
             <v-tab-item :key="2">
-              <member-view
-                :id="id"
-                :items.sync="item.members"
-                :state="item.state"
-                ref="member"
-                @updated="updateChances"
-              />
+              <member-view :id="id" :items.sync="item.members" :state="item.state" ref="member" @updated="updateChances"/>
             </v-tab-item>
-            <v-tab-item :key="3" v-if="item.state === 3">
+            <v-tab-item :key="3" v-if="!!myself">
+              <member-item :id="id" :state="item.state" :item="myself"/>
+            </v-tab-item>
+            <v-tab-item :key="4" v-if="item.state === 3">
               <batch :id="id" @updated="updateMembers"/>
+            </v-tab-item>
+            <v-tab-item :key="5">
+              <gallery :items="item.medias" @updated="updateMedias"/>
+            </v-tab-item>
+            <v-tab-item :key="6">
+              <v-card flat>
+                <v-card-text>
+                  <input type="file" ref="input"/>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer/>
+                  <v-btn color="primary" depressed @click="upload" :loading="$store.state.loading">上传</v-btn>
+                </v-card-actions>
+              </v-card>
             </v-tab-item>
           </v-tabs-items>
         </v-card>
@@ -91,10 +100,12 @@ import Axios from 'axios'
 import dialogs from '../../utils/dialogs'
 import { V_NOT_EMPTY } from '../../utils/validation'
 import userInfo from '../../components/userinfo.vue'
+import gallery from '../../components/gallery.vue'
 import chanceView from './chance/view.vue'
 import teamView from './team/view.vue'
 import memberView from './member/view.vue'
 import batch from './batch.vue'
+import memberItem from './member/item.vue'
 
 export default {
   components: {
@@ -102,9 +113,19 @@ export default {
     chanceView,
     teamView,
     memberView,
-    batch
+    batch,
+    gallery,
+    memberItem
   },
   props: ['id'],
+  computed: {
+    profile () {
+      return this.$store.state.profile
+    },
+    myself () {
+      return this.item.members.find(x => x.userId === this.profile.id)
+    }
+  },
   data: () => ({
     item: {
       id: -1,
@@ -115,7 +136,8 @@ export default {
       owner: {},
       chances: [],
       teams: [],
-      members: []
+      members: [],
+      medias: []
     },
     valid: false,
     rules: [V_NOT_EMPTY()],
@@ -173,6 +195,37 @@ export default {
         } finally {
           this.$store.commit('loading', false)
         }
+      }
+    },
+    async upload () {
+      if (!this.$refs.input.files.length) {
+        dialogs.toasts.error('请选择文件')
+        return
+      }
+      this.$store.commit('loading', true)
+      const form = new FormData()
+      form.append('memberId', this.myself.id)
+      form.append('file', this.$refs.input.files[0])
+      try {
+        const { data: { s, p } } = await Axios.post(`/medias`, form)
+        if (s !== 0) throw new Error(p)
+        await this.load()
+      } catch (err) {
+        dialogs.toasts.error(err)
+      } finally {
+        this.$store.commit('loading', false)
+      }
+    },
+    async updateMedias () {
+      this.$store.commit('loading', true)
+      try {
+        const { data: { s, p } } = await Axios.get(`/activities/${this.id}/medias`)
+        if (s !== 0) throw new Error(p)
+        this.item.medias = p
+      } catch (err) {
+        dialogs.toasts.error(err)
+      } finally {
+        this.$store.commit('loading', false)
       }
     },
     updateChances () {

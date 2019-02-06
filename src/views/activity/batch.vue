@@ -13,7 +13,7 @@
     </v-form>
     <v-card-actions>
       <v-spacer/>
-      <v-btn color="primary" depressed @click="apply">应用</v-btn>
+      <v-btn color="primary" depressed @click="apply" :loading="$store.state.loading">应用</v-btn>
     </v-card-actions>
   </v-card>
 </template>

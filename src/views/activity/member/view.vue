@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="headers" :items="items">
+  <v-data-table expand :headers="headers" :items="items" :loading="$store.state.loading">
     <template slot="items" slot-scope="props">
       <tr @click="props.expanded = !props.expanded">
         <td>{{ props.item.id }}</td>
@@ -63,11 +63,19 @@ export default {
       teamId: undefined
     }
   }),
+  watch: {
+    id: {
+      immediate: true,
+      handler () {
+        this.addForm.activityId = this.id
+      }
+    }
+  },
   methods: {
     async add () {
       this.$store.commit('loading', true)
       try {
-        const { data: { s, p } } = await Axios.post(`/activities/${this.id}/members`, this.addForm)
+        const { data: { s, p } } = await Axios.post(`/members`, this.addForm)
         if (s !== 0) throw new Error(p)
         await this.load()
         this.$emit('updated')

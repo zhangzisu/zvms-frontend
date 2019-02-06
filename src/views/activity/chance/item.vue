@@ -3,7 +3,7 @@
     <!-- TODO: 修改机会,先咕着 -->
     <v-card-actions v-if="state === 1 && $store.state.profile.isAdmin">
       <v-spacer/>
-      <v-btn color="accent" @click="remove">删除</v-btn>
+      <v-btn color="accent" @click="remove" :loading="$store.state.loading">删除</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -19,7 +19,7 @@ export default {
     async remove () {
       this.$store.commit('loading', true)
       try {
-        const { data: { s, p } } = await Axios.delete(`/activities/${this.id}/chances/${this.item.id}`)
+        const { data: { s, p } } = await Axios.delete(`/chances/${this.item.id}`)
         if (s !== 0) throw new Error(p)
         this.$emit('updated')
       } catch (err) {

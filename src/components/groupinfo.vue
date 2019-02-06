@@ -12,7 +12,7 @@
         <v-flex xs12>
           <v-card>
             <v-card-title class="headline">义工活动</v-card-title>
-            <v-data-table :headers="chanceHeaders" :items="info.chances">
+            <v-data-table expand :headers="chanceHeaders" :items="info.chances" :loading="$store.state.loading">
               <template slot="items" slot-scope="props">
                 <tr @click="props.expanded = !props.expanded">
                   <td>{{ props.item.id }}</td>
@@ -29,7 +29,7 @@
         <v-flex xs12>
           <v-card>
             <v-card-title class="headline">成员</v-card-title>
-            <v-data-table :headers="userHeaders" :items="info.users">
+            <v-data-table expand :headers="userHeaders" :items="info.users" :loading="$store.state.loading">
               <template slot="items" slot-scope="props">
                 <tr @click="props.expanded = !props.expanded">
                   <td>{{ props.item.id }}</td>
@@ -64,7 +64,7 @@ export default {
     chanceHeaders: [
       { text: 'CID', value: 'id' },
       { text: '剩余人数', value: 'quota' },
-      { text: '公开', valus: 'isPublic' },
+      { text: '公开', value: 'isPublic' },
       { text: '活动', value: 'activityId' }
     ]
   })

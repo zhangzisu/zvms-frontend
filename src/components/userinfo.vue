@@ -51,26 +51,65 @@
           </v-card>
         </v-flex>
       </v-layout>
-      <v-layout row v-if="showHistory !== undefined">
-        <v-flex xs12>
-          <v-card>
-            <v-card-title class="headline">义工历史</v-card-title>
-            <v-card-text>未实现</v-card-text>
-          </v-card>
-        </v-flex>
-      </v-layout>
+      <template v-if="showRelations !== undefined">
+        <v-layout row>
+          <v-flex xs12>
+            <v-card>
+              <v-card-title class="headline">义工历史</v-card-title>
+              <v-data-table :items="info.history" :headers="headers" :loading="$store.state.loading">
+                <template slot="items" slot-scope="{ item }">
+                  <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.activityId }}</td>
+                    <td>{{ item.iTime }}</td>
+                    <td>{{ item.oTime }}</td>
+                    <td>{{ item.uTime }}</td>
+                    <td>{{ item.isLeaderApproved && item.isManagerApproved && item.isAdminApproved }}</td>
+                    <td>
+                      <v-btn icon :to="`/activities/show/${item.activityId}`">
+                        <v-icon small>open_in_new</v-icon>
+                      </v-btn>
+                    </td>
+                  </tr>
+                </template>
+              </v-data-table>
+            </v-card>
+          </v-flex>
+        </v-layout>
+        <v-layout row>
+          <v-flex xs12>
+            <v-card>
+              <v-card-title class="headline">我上传的图片</v-card-title>
+              <gallery :items="info.medias" @updated="$emit('updated')"/>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </template>
     </v-container>
   </v-card>
 </template>
 
 <script>
 import gravatar from 'gravatar'
+import gallery from './gallery.vue'
 
 export default {
   name: 'userinfo',
-  props: ['info', 'showHistory'],
+  components: {
+    gallery
+  },
+  props: ['info', 'showRelations'],
   data: () => ({
-    avatarUrl: undefined
+    avatarUrl: undefined,
+    headers: [
+      { text: 'MID', value: 'id' },
+      { text: '活动ID', value: 'activityId' },
+      { text: '校内时间', value: 'iTime' },
+      { text: '校外时间', value: 'oTime' },
+      { text: '通用时间', value: 'uTime' },
+      { text: '是否生效', sortable: false },
+      { text: '操作', sortable: false }
+    ]
   }),
   watch: {
     info: {

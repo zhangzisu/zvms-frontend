@@ -2,20 +2,17 @@
   <v-card class="grey lighten-3" flat>
     <v-card-actions>
       <v-spacer/>
-      <v-btn
-        color="primary"
-        @click="load"
-        :loading="$store.state.loading"
-        :disabled="!!extra"
-        depressed
-      >加载信息</v-btn>
-      <v-btn color="accent" @click="remove" depressed v-if="noAction === undefined">删除</v-btn>
+      <v-btn color="primary" @click="load" :loading="$store.state.loading" :disabled="!!extra" depressed>加载信息</v-btn>
+      <v-btn color="accent" @click="remove" :loading="$store.state.loading" depressed v-if="noAction === undefined">删除</v-btn>
     </v-card-actions>
     <v-card-text>
       <v-tabs v-model="tab" centered grow>
         <v-tab :key="0">状态</v-tab>
         <v-tab :key="1" v-if="state === 3">编辑</v-tab>
-        <v-tab :key="2" v-if="!!extra">用户</v-tab>
+        <template v-if="!!extra">
+          <v-tab :key="2">用户</v-tab>
+          <v-tab :key="3">资料</v-tab>
+        </template>
       </v-tabs>
       <v-tabs-items v-model="tab">
         <v-tab-item :key="0">
@@ -43,9 +40,14 @@
             </v-card-actions>
           </v-card>
         </v-tab-item>
-        <v-tab-item :key="2" v-if="!!extra">
-          <user-info :info="extra.user"/>
-        </v-tab-item>
+        <template v-if="!!extra">
+          <v-tab-item :key="2">
+            <user-info :info="extra.user"/>
+          </v-tab-item>
+          <v-tab-item :key="3">
+            <gallery :items="extra.medias" @updated="load()"/>
+          </v-tab-item>
+        </template>
       </v-tabs-items>
     </v-card-text>
   </v-card>
@@ -55,11 +57,13 @@
 import Axios from 'axios'
 import dialogs from '../../../utils/dialogs'
 import userInfo from '../../../components/userinfo.vue'
+import gallery from '../../../components/gallery.vue'
 
 export default {
   name: 'memberItem',
   components: {
-    userInfo
+    userInfo,
+    gallery
   },
   props: ['id', 'item', 'state', 'noAction'],
   data: () => ({
@@ -70,7 +74,7 @@ export default {
     async load () {
       this.$store.commit('loading', true)
       try {
-        const { data: { s, p } } = await Axios.get(`/activities/${this.id}/members/${this.item.id}`)
+        const { data: { s, p } } = await Axios.get(`/members/${this.item.id}`)
         if (s !== 0) throw new Error(p)
         this.extra = p
       } catch (err) {
@@ -82,7 +86,7 @@ export default {
     async remove () {
       this.$store.commit('loading', true)
       try {
-        const { data: { s, p } } = await Axios.delete(`/activities/${this.id}/members/${this.item.id}`)
+        const { data: { s, p } } = await Axios.delete(`/members/${this.item.id}`)
         if (s !== 0) throw new Error(p)
         this.$emit('updated')
       } catch (err) {
@@ -94,7 +98,7 @@ export default {
     async update () {
       this.$store.commit('loading', true)
       try {
-        const { data: { s, p } } = await Axios.put(`/activities/${this.id}/members/${this.item.id}`, this.item)
+        const { data: { s, p } } = await Axios.put(`/members/${this.item.id}`, this.item)
         if (s !== 0) throw new Error(p)
         this.$emit('updated')
       } catch (err) {

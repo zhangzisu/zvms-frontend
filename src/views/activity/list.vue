@@ -3,13 +3,7 @@
     <v-layout fill-height>
       <v-flex xs12>
         <v-card>
-          <v-data-table
-            :rows-per-page-items="[5, 10, 15, 25, 50]"
-            :headers="headers"
-            :items="items"
-            :pagination.sync="pagination"
-            :loading="$store.state.loading"
-          >
+          <v-data-table expand :rows-per-page-items="[5, 10, 15, 25, 50]" :headers="headers" :items="items" :pagination.sync="pagination" :loading="$store.state.loading">
             <template slot="items" slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
                 <td>{{ props.item.id }}</td>
@@ -18,10 +12,10 @@
               </tr>
             </template>
             <template slot="expand" slot-scope="props">
-              <v-container fluid grid-list-md>
+              <v-container fluid grid-list-md class="grey lighten-3">
                 <v-layout row>
                   <v-flex xs3>
-                    <v-card>
+                    <v-card class="fill-height">
                       <v-card-text
                         class="display-3 font-weight-thin text-xs-center"
                       >#{{ props.item.id }}</v-card-text>
@@ -32,9 +26,11 @@
                     </v-card>
                   </v-flex>
                   <v-flex xs9>
-                    <v-card>
+                    <v-card class="fill-height">
                       <v-card-title class="headline">{{ props.item.name }}</v-card-title>
-                      <v-card-text>{{ props.item.description }}</v-card-text>
+                      <v-card-text>
+                        <pre>{{ props.item.description }}</pre>
+                      </v-card-text>
                       <v-card-actions>
                         <v-spacer/>
                         <v-btn color="primary" :to="`/activities/show/${props.item.id}`">更多</v-btn>

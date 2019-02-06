@@ -5,8 +5,8 @@
         <v-card>
           <v-card-title class="headline primary white--text">登录</v-card-title>
           <v-card-text>
-            <v-text-field type="number" v-model.number="uid" label="用户ID"/>
-            <v-text-field type="password" v-model="pass" label="密码"/>
+            <v-text-field type="username" v-model="form.username" label="用户名/邮箱"/>
+            <v-text-field type="password" v-model="form.password" label="密码"/>
           </v-card-text>
           <v-card-actions>
             <v-spacer/>
@@ -25,22 +25,20 @@ import dialogs from '../utils/dialogs'
 export default {
   name: 'login',
   data: () => ({
-    uid: undefined,
-    pass: undefined
+    form: {
+      username: undefined,
+      password: undefined
+    }
   }),
   methods: {
     async login () {
       this.$store.commit('loading', true)
-      const form = {
-        id: this.uid,
-        password: this.pass
-      }
       try {
         let s, p;
-        ({ data: { s, p } } = await Axios.post('/auth/login', form))
+        ({ data: { s, p } } = await Axios.post('/auth/login', this.form))
         if (s !== 0) throw new Error(p)
         this.$store.commit('token', p.token);
-        ({ data: { s, p } } = await Axios.get('/users/' + form.id))
+        ({ data: { s, p } } = await Axios.get('/users/' + p.userId))
         if (s !== 0) throw new Error(p)
         this.$store.commit('profile', p)
         dialogs.toasts.success('Login succeeded')

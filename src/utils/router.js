@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import home from '../views/home.vue'
-import my from '../views/my.vue'
+import user from '../views/user.vue'
 import login from '../views/login.vue'
 import admin from '../views/admin.vue'
 import error404 from '../views/error404.vue'
@@ -20,12 +20,15 @@ export default new Router({
     {
       path: '/my',
       name: 'my',
-      component: my,
+      component: user,
       beforeEnter: (to, from, next) => {
         if (store.state.token) {
           return next()
         }
         return next('login')
+      },
+      props: {
+        id: store.state.profile.id
       }
     },
     {

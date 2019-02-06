@@ -1,10 +1,9 @@
 <template>
-  <v-data-table :headers="headers" :items="items">
+  <v-data-table expand :headers="headers" :items="items" :loading="$store.state.loading">
     <template slot="items" slot-scope="props">
       <tr @click="props.expanded = !props.expanded">
         <td>{{ props.item.id }}</td>
         <td>{{ props.item.quota }}</td>
-        <td>{{ props.item.isPublic }}</td>
         <td>{{ props.item.groupId }}</td>
       </tr>
     </template>
@@ -17,12 +16,11 @@
         <v-card>
           <v-card-text>
             <v-text-field type="number" label="报名上限" v-model.number="addForm.quota"/>
-            <v-checkbox label="公开" v-model="addForm.isPublic"/>
             <v-text-field type="number" label="GID" v-model.number="addForm.groupId"/>
           </v-card-text>
           <v-card-actions>
             <v-spacer/>
-            <v-btn class="primary" @click="add">创建</v-btn>
+            <v-btn class="primary" @click="add" :loading="$store.state.loading">创建</v-btn>
           </v-card-actions>
         </v-card>
       </v-menu>
@@ -45,22 +43,28 @@ export default {
     headers: [
       { text: 'CID', value: 'id' },
       { text: '剩余人数', value: 'quota' },
-      { text: '公开', value: 'isPublic' },
       { text: 'GID', value: 'groupId' }
     ],
     addMenu: false,
     addForm: {
       quota: 0,
-      isPublic: false,
       groupId: undefined
     }
   }),
+  watch: {
+    id: {
+      immediate: true,
+      handler () {
+        this.addForm.activityId = this.id
+      }
+    }
+  },
   methods: {
     async add () {
       this.addMenu = false
       this.$store.commit('loading', true)
       try {
-        const { data: { s, p } } = await Axios.post(`/activities/${this.id}/chances`, this.addForm)
+        const { data: { s, p } } = await Axios.post(`/chances`, this.addForm)
         if (s !== 0) throw new Error(p)
         await this.load()
       } catch (err) {

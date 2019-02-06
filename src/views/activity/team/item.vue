@@ -2,14 +2,8 @@
   <v-card class="grey lighten-3" flat>
     <v-card-actions>
       <v-spacer/>
-      <v-btn
-        color="primary"
-        @click="load"
-        depressed
-        :loading="$store.state.loading"
-        :disabled="!!extra"
-      >加载信息</v-btn>
-      <v-btn color="accent" @click="remove" depressed>删除</v-btn>
+      <v-btn color="primary" @click="load" depressed :loading="$store.state.loading" :disabled="!!extra">加载信息</v-btn>
+      <v-btn color="accent" @click="remove" depressed :loading="$store.state.loading">删除</v-btn>
     </v-card-actions>
     <v-card-text>
       <v-card>
@@ -57,7 +51,7 @@ export default {
     async remove () {
       this.$store.commit('loading', true)
       try {
-        const { data: { s, p } } = await Axios.delete(`/activities/${this.id}/teams/${this.item.id}`)
+        const { data: { s, p } } = await Axios.delete(`/teams/${this.item.id}`)
         if (s !== 0) throw new Error(p)
         this.$emit('updated')
       } catch (err) {
@@ -69,7 +63,7 @@ export default {
     async load () {
       this.$store.commit('loading', true)
       try {
-        const { data: { s, p } } = await Axios.get(`/activities/${this.id}/teams/${this.item.id}`)
+        const { data: { s, p } } = await Axios.get(`/teams/${this.item.id}`)
         if (s !== 0) throw new Error(p)
         this.extra = p
       } catch (err) {

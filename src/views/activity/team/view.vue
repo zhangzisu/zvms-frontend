@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="headers" :items="items">
+  <v-data-table expand :headers="headers" :items="items" :loading="$store.state.loading">
     <template slot="items" slot-scope="props">
       <tr @click="props.expanded = !props.expanded">
         <td>{{ props.item.id }}</td>
@@ -18,7 +18,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer/>
-            <v-btn class="primary" @click="add">创建</v-btn>
+            <v-btn class="primary" @click="add" :loading="$store.state.loading">创建</v-btn>
           </v-card-actions>
         </v-card>
       </v-menu>
@@ -47,12 +47,20 @@ export default {
       leaderId: undefined
     }
   }),
+  watch: {
+    id: {
+      immediate: true,
+      handler () {
+        this.addForm.activityId = this.id
+      }
+    }
+  },
   methods: {
     async add () {
       this.addMenu = false
       this.$store.commit('loading', true)
       try {
-        const { data: { s, p } } = await Axios.post(`/activities/${this.id}/teams`, this.addForm)
+        const { data: { s, p } } = await Axios.post(`/teams`, this.addForm)
         if (s !== 0) throw new Error(p)
         await this.load()
       } catch (err) {

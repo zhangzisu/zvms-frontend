@@ -8,7 +8,7 @@ import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import Axios from 'axios'
 
-Axios.defaults.baseURL = 'http://127.0.0.1:8007/api'
+Axios.defaults.baseURL = '/api'
 if (store.state.token) {
   Axios.defaults.headers['x-access-token'] = store.state.token
 }
