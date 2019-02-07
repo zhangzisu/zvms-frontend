@@ -5,10 +5,14 @@
         <td>{{ props.item.id }}</td>
         <td>{{ props.item.activityId }}</td>
         <td>{{ props.item.userId }}</td>
+        <td>{{ props.item.name }}</td>
         <td>{{ props.item.mimeType }}</td>
         <td>
-          <v-btn icon>
-            <v-icon small @click="remove(props.item.id)">delete</v-icon>
+          <v-btn icon @click="remove(props.item.id)">
+            <v-icon small>delete</v-icon>
+          </v-btn>
+          <v-btn icon :href="`/api/medias/${props.item.id}`" :download="props.item.name">
+            <v-icon small>cloud_download</v-icon>
           </v-btn>
         </td>
       </tr>
@@ -17,7 +21,7 @@
       <v-card flat class="grey lighten-3">
         <v-container justify-center fluid>
           <v-layout justify-center fill-height>
-            <img style="display: inline-block" :src="`/api/medias/${item.id}`">
+            <v-img :src="`/api/medias/${item.id}`"/>
           </v-layout>
         </v-container>
       </v-card>
@@ -37,6 +41,7 @@ export default {
       { text: 'ID', value: 'id' },
       { text: '活动ID', value: 'activityId' },
       { text: '用户ID', value: 'userId' },
+      { text: '文件名', value: 'name' },
       { text: 'Mime类型', value: 'mimeType' },
       { text: '操作', sortable: false }
     ]

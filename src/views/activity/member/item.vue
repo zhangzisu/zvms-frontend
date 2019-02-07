@@ -31,7 +31,7 @@
               <v-text-field v-model.number="item.uTime" type="number" label="万能时间"/>
               <v-textarea v-model="item.comment" label="评论" placeholder="留空为不变"/>
               <v-checkbox v-model="item.isLeaderApproved" label="队长批准"></v-checkbox>
-              <v-checkbox v-model="item.isManagerApproved" label="学生会批准"></v-checkbox>
+              <v-checkbox v-model="item.isManagerApproved" label="实践部批准"></v-checkbox>
               <v-checkbox v-model="item.isAdminApproved" label="义管会批准"></v-checkbox>
             </v-card-text>
             <v-card-actions>

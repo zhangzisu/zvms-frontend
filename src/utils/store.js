@@ -7,7 +7,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    profile: undefined,
+    profile: {
+      id: 0
+    },
     token: undefined,
     isLoading: false
   },

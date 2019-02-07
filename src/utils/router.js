@@ -27,9 +27,9 @@ export default new Router({
         }
         return next('login')
       },
-      props: {
+      props: () => ({
         id: store.state.profile.id
-      }
+      })
     },
     {
       path: '/login',

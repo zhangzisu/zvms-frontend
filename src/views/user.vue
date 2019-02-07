@@ -4,7 +4,7 @@
       <v-flex xs12>
         <v-card flat>
           <v-tabs v-model="tab" centered grow>
-            <v-tab :key="0">我的</v-tab>
+            <v-tab :key="0">用户</v-tab>
             <v-tab :key="1">编辑</v-tab>
             <v-tab :key="2">班级</v-tab>
           </v-tabs>
@@ -20,7 +20,7 @@
                   <v-text-field v-model="userInfo.password" type="password" label="新密码（留空为不变）"/>
                   <v-text-field v-model="userInfo.name" label="用户名" :disabled="!$store.state.profile.isAdmin"/>
                   <v-checkbox v-model="userInfo.isSecretary" label="团支书" :disabled="!$store.state.profile.isAdmin"/>
-                  <v-checkbox v-model="userInfo.isManager" label="学生会" :disabled="!$store.state.profile.isAdmin"/>
+                  <v-checkbox v-model="userInfo.isManager" label="实践部" :disabled="!$store.state.profile.isAdmin"/>
                   <v-checkbox v-model="userInfo.isAdmin" label="义管会" :disabled="!$store.state.profile.isAdmin"/>
                   <v-checkbox v-model="userInfo.isProvider" label="提供方" :disabled="!$store.state.profile.isAdmin"/>
                   <v-checkbox v-model="userInfo.isRemoved" label="无效用户" :disabled="!$store.state.profile.isAdmin"/>
@@ -60,14 +60,19 @@ export default {
     classInfo: undefined,
     userInfo: {}
   }),
-  async created () {
-    this.load()
-  },
   watch: {
-    tab () {
-      if (this.tab === 1) {
-        if (this.classInfo === undefined) {
-          this.loadClassInfo()
+    id: {
+      handler () {
+        this.load()
+      },
+      immediate: true
+    },
+    tab: {
+      handler () {
+        if (this.tab === 2) {
+          if (this.classInfo === undefined) {
+            this.loadClassInfo()
+          }
         }
       }
     }
@@ -94,7 +99,7 @@ export default {
         const { data: { s, p } } = await Axios.get('/groups/' + this.userInfo.groupId)
         if (s !== 0) throw new Error(p)
         this.classInfo = p
-        this.tab = 1
+        this.tab = 2
       } catch (err) {
         dialogs.toasts.error(err)
       } finally {

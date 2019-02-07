@@ -6,12 +6,12 @@
           <v-card class="fill-height">
             <v-card-text>
               <v-avatar tile size="100%">
-                <img :src="avatarUrl">
+                <img :src="avatarUrl"/>
               </v-avatar>
             </v-card-text>
             <v-card-text>
-              <v-chip v-if="info.isAdmin">管理员</v-chip>
-              <v-chip v-if="info.isManager">学生部</v-chip>
+              <v-chip v-if="info.isAdmin">义管会</v-chip>
+              <v-chip v-if="info.isManager">实践部</v-chip>
               <v-chip v-if="info.isSecretary">团支书</v-chip>
               <v-chip v-if="info.isProvider">义工提供方</v-chip>
               <v-chip v-if="info.isRemoved">无效用户</v-chip>

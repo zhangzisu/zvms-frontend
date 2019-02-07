@@ -7,6 +7,7 @@ module.exports = {
   productionSourceMap: undefined,
   css: undefined,
   devServer: {
-    proxy: 'http://localhost:8007'
+    proxy: 'http://localhost:8007',
+    disableHostCheck: true
   }
 }

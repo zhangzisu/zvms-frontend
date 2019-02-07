@@ -34,6 +34,7 @@
             <v-spacer/>
             <v-btn color="primary" @click="showEdit = !showEdit" depressed v-if="profile.isAdmin || (profile.isProvider && profile.id === item.ownerId)">编辑</v-btn>
             <v-btn color="accent" @click="changeState" depressed :disabled="item.state === 4" v-if="profile.isAdmin">更改状态</v-btn>
+            <v-btn color="warning" @click="compute" depressed :disabled="item.state !== 4 || item.isComputed" v-if="profile.isAdmin">计算贡献</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -48,7 +49,7 @@
             <v-tab :key="3" v-if="!!myself">我的义工</v-tab>
             <v-tab :key="4" v-if="item.state === 3">批量操作</v-tab>
             <v-tab :key="5">媒体资料</v-tab>
-            <v-tab :key="6">资料上传</v-tab>
+            <v-tab :key="6" v-if="!!myself && item.state === 3">资料上传</v-tab>
           </v-tabs>
           <v-tabs-items v-model="tab">
             <v-tab-item :key="0">
@@ -69,7 +70,7 @@
             <v-tab-item :key="5">
               <gallery :items="item.medias" @updated="updateMedias"/>
             </v-tab-item>
-            <v-tab-item :key="6">
+            <v-tab-item :key="6" v-if="!!myself && item.state === 3">
               <v-card flat>
                 <v-card-text>
                   <input type="file" ref="input"/>
@@ -151,8 +152,13 @@ export default {
     ],
     tab: 0
   }),
-  created () {
-    this.load()
+  watch: {
+    id: {
+      handler () {
+        this.load()
+      },
+      immediate: true
+    }
   },
   methods: {
     async load () {
@@ -195,6 +201,18 @@ export default {
         } finally {
           this.$store.commit('loading', false)
         }
+      }
+    },
+    async compute () {
+      this.$store.commit('loading', true)
+      try {
+        const { data: { s, p } } = await Axios.post(`/activities/${this.id}/compute`)
+        if (s !== 0) throw new Error(p)
+        await this.load()
+      } catch (err) {
+        console.log(err)
+      } finally {
+        this.$store.commit('loading', false)
       }
     },
     async upload () {

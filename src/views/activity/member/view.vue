@@ -54,7 +54,7 @@ export default {
       { text: '校外时间', value: 'oTime' },
       { text: '通用时间', value: 'uTime' },
       { text: '队长批准', value: 'isLeaderApproved' },
-      { text: '学生会批准', value: 'isManagerApproved' },
+      { text: '实践部批准', value: 'isManagerApproved' },
       { text: '义管会批准', value: 'isAdminApproved' }
     ],
     addMenu: false,
@@ -73,6 +73,7 @@ export default {
   },
   methods: {
     async add () {
+      this.addMenu = false
       this.$store.commit('loading', true)
       try {
         const { data: { s, p } } = await Axios.post(`/members`, this.addForm)
@@ -86,7 +87,6 @@ export default {
       }
     },
     async load () {
-      this.addMenu = false
       this.$store.commit('loading', true)
       try {
         const { data: { s, p } } = await Axios.get(`/activities/${this.id}/members`)
