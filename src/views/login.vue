@@ -6,7 +6,7 @@
           <v-card-title class="headline primary white--text">登录</v-card-title>
           <v-card-text>
             <v-text-field type="username" v-model="form.username" label="用户名/邮箱"/>
-            <v-text-field type="password" v-model="form.password" label="密码"/>
+            <v-text-field type="password" v-model="form.password" label="密码" @keyup.native.enter="login"/>
           </v-card-text>
           <v-card-actions>
             <v-spacer/>

@@ -3,6 +3,11 @@
     <v-layout fill-height>
       <v-flex xs12>
         <v-card>
+          <v-card-title>
+            <div class="headline">义工列表</div>
+            <v-spacer/>
+            <v-text-field placeholder="输入搜索内容，留空显示全部" append-icon="search" single-line @click:append="load" @keyup.native.enter="load" v-model="search"/>
+          </v-card-title>
           <v-data-table expand :rows-per-page-items="[5, 10, 15, 25, 50]" :headers="headers" :items="items" :pagination.sync="pagination" :loading="$store.state.loading">
             <template slot="items" slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
@@ -77,7 +82,8 @@ export default {
       rowsPerPage: 15,
       sortBy: undefined,
       totalItems: 0
-    }
+    },
+    search: undefined
   }),
   watch: {
     pagination: {
@@ -94,7 +100,7 @@ export default {
       try {
         const {
           data: { s, p }
-        } = await Axios.get('/activities', { params: this.pagination })
+        } = await Axios.get('/activities', { params: Object.assign({ search: this.search }, this.pagination) })
         if (s !== 0) throw new Error(p);
         [this.items, this.pagination.totalItems] = p
       } catch (err) {

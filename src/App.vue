@@ -8,6 +8,9 @@
         <v-list-tile to="/activities">
           <v-list-tile-content>义工列表</v-list-tile-content>
         </v-list-tile>
+        <v-list-tile to="/users">
+          <v-list-tile-content>用户列表</v-list-tile-content>
+        </v-list-tile>
         <v-list-tile to="/my">
           <v-list-tile-content>个人中心</v-list-tile-content>
         </v-list-tile>
@@ -22,7 +25,7 @@
       <v-toolbar-side-icon @click="nav = !nav"/>
       <v-toolbar-title class="headline text-uppercase">
         <span class="font-weight-bold">镇海中学义工管理系统</span>
-        <span class="font-weight-light text-none">α-test-1</span>
+        <span class="font-weight-light text-none">α-test-2</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-progress-circular indeterminate v-show="$store.state.isLoading"/>

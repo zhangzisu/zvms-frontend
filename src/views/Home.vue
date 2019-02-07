@@ -28,7 +28,7 @@ export default {
   name: 'home',
   data: () => ({
     links: [
-      { href: 'https://github.com/ZhangZisu/zvms-frontend', name: '开源项目' }
+      { href: 'https://github.com/ZhangZisu/zvms', name: '开源项目' }
     ]
   })
 }

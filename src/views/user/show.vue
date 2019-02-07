@@ -44,9 +44,9 @@
 
 <script>
 import Axios from 'axios'
-import dialogs from '../utils/dialogs'
-import userinfo from '../components/userinfo.vue'
-import groupinfo from '../components/groupinfo.vue'
+import dialogs from '../../utils/dialogs'
+import userinfo from '../../components/userinfo.vue'
+import groupinfo from '../../components/groupinfo.vue'
 
 export default {
   name: 'user',

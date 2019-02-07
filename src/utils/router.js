@@ -1,26 +1,28 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import home from '../views/home.vue'
-import user from '../views/user.vue'
 import login from '../views/login.vue'
 import admin from '../views/admin.vue'
 import error404 from '../views/error404.vue'
 import * as activity from '../views/activity'
+import * as user from '../views/user'
 import store from './store'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    // 首页
     {
       path: '/',
       name: 'home',
       component: home
     },
+    // 用户相关
     {
       path: '/my',
       name: 'my',
-      component: user,
+      component: user.show,
       beforeEnter: (to, from, next) => {
         if (store.state.token) {
           return next()
@@ -32,6 +34,16 @@ export default new Router({
       })
     },
     {
+      path: '/users/show/:id',
+      component: user.show,
+      props: true
+    },
+    {
+      path: '/users',
+      component: user.list
+    },
+    // 登录
+    {
       path: '/login',
       name: 'login',
       component: login,
@@ -42,11 +54,13 @@ export default new Router({
         return next()
       }
     },
+    // 管理（制作中）
     {
       path: '/admin',
       name: 'admin',
       component: admin
     },
+    // 活动相关
     {
       path: '/activities',
       name: 'activities',
@@ -61,6 +75,7 @@ export default new Router({
       component: activity.show,
       props: true
     },
+    // 404
     {
       path: '*',
       name: 'error404',
