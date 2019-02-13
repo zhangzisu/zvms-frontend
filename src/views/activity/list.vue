@@ -8,7 +8,7 @@
             <v-spacer/>
             <v-text-field placeholder="输入搜索内容，留空显示全部" append-icon="search" single-line @click:append="load" @keyup.native.enter="load" v-model="search"/>
           </v-card-title>
-          <v-data-table expand :rows-per-page-items="[5, 10, 15, 25, 50]" :headers="headers" :items="items" :pagination.sync="pagination" :loading="$store.state.loading">
+          <v-data-table expand :rows-per-page-items="[5, 10, 15, 25, 50]" :headers="headers" :items="items" :pagination.sync="pagination" :loading="$store.state.loading" :total-items="totalItems">
             <template slot="items" slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
                 <td>{{ props.item.id }}</td>
@@ -83,12 +83,13 @@ export default {
       sortBy: undefined,
       totalItems: 0
     },
-    search: undefined
+    search: undefined,
+    totalItems: 0
   }),
   watch: {
     pagination: {
       handler () {
-        this.load()
+        this.$store.state.loading || this.load()
       },
       deep: true,
       immediate: true
@@ -102,11 +103,11 @@ export default {
           data: { s, p }
         } = await Axios.get('/activities', { params: Object.assign({ search: this.search }, this.pagination) })
         if (s !== 0) throw new Error(p);
-        [this.items, this.pagination.totalItems] = p
+        [this.items, this.totalItems] = p
       } catch (err) {
         dialogs.toasts.error(err)
       } finally {
-        this.$store.commit('loading', false)
+        this.$nextTick(() => this.$store.commit('loading', false))
       }
     }
   }
