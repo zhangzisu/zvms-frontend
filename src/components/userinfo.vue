@@ -116,7 +116,7 @@ export default {
       deep: true,
       immediate: true,
       handler () {
-        this.avatarUrl = gravatar.url(this.info.email, { s: '256' })
+        this.avatarUrl = gravatar.url(this.info.email, { s: '256', d: 'mp' })
       }
     }
   }

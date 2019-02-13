@@ -34,13 +34,17 @@ export default new Router({
       })
     },
     {
+      path: '/users',
+      component: user.list
+    },
+    {
       path: '/users/show/:id',
       component: user.show,
       props: true
     },
     {
-      path: '/users',
-      component: user.list
+      path: '/users/create',
+      component: user.create
     },
     // 登录
     {

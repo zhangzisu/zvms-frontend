@@ -99,7 +99,7 @@
 <script>
 import Axios from 'axios'
 import dialogs from '../../utils/dialogs'
-import { V_NOT_EMPTY } from '../../utils/validation'
+import { Z_NOT_EMPTY } from '../../utils/validation'
 import userInfo from '../../components/userinfo.vue'
 import gallery from '../../components/gallery.vue'
 import chanceView from './chance/view.vue'
@@ -141,7 +141,7 @@ export default {
       medias: []
     },
     valid: false,
-    rules: [V_NOT_EMPTY()],
+    rules: [Z_NOT_EMPTY()],
     showEdit: false,
     status: [
       '等待审核',

@@ -32,7 +32,6 @@ import dialogs from '../../../utils/dialogs'
 import teamItem from './item.vue'
 
 export default {
-  name: 'teamView',
   components: {
     teamItem
   },

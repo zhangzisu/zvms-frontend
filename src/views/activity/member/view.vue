@@ -40,7 +40,6 @@ import dialogs from '../../../utils/dialogs'
 import memberItem from './item.vue'
 
 export default {
-  name: 'memberView',
   components: {
     memberItem
   },

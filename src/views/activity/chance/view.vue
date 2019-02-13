@@ -34,7 +34,6 @@ import dialogs from '../../../utils/dialogs'
 import chanceItem from './item.vue'
 
 export default {
-  name: 'chanceView',
   components: {
     chanceItem
   },

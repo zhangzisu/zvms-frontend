@@ -23,7 +23,6 @@ import Axios from 'axios'
 import dialogs from '../../utils/dialogs'
 
 export default {
-  name: 'batch',
   props: ['id', 'tid'],
   data: () => ({
     form: {

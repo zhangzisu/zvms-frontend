@@ -36,7 +36,7 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer/>
-              <v-btn depressed @click="update">更新</v-btn>
+              <v-btn color="primary" depressed @click="update">更新</v-btn>
             </v-card-actions>
           </v-card>
         </v-tab-item>
@@ -60,7 +60,6 @@ import userInfo from '../../../components/userinfo.vue'
 import gallery from '../../../components/gallery.vue'
 
 export default {
-  name: 'memberItem',
   components: {
     userInfo,
     gallery

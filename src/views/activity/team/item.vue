@@ -36,7 +36,6 @@ import memberView from '../member/view.vue'
 import batch from '../batch.vue'
 
 export default {
-  name: 'teamItem',
   props: ['id', 'item', 'state'],
   components: {
     userInfo,

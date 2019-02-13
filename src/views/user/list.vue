@@ -22,6 +22,9 @@
             <template slot="expand" slot-scope="{ item }">
               <userinfo :info="item"/>
             </template>
+            <template slot="footer" v-if="$store.state.profile.isAdmin">
+              <v-btn color="primary" depressed to="/users/create">新建用户</v-btn>
+            </template>
           </v-data-table>
         </v-card>
       </v-flex>

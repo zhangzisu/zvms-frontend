@@ -25,7 +25,7 @@
 <script>
 import Axios from 'axios'
 import dialogs from '../../utils/dialogs'
-import { V_NOT_EMPTY } from '../../utils/validation'
+import { Z_NOT_EMPTY } from '../../utils/validation'
 
 export default {
   data: () => ({
@@ -36,7 +36,7 @@ export default {
       isPublic: false
     },
     valid: false,
-    rules: [V_NOT_EMPTY()]
+    rules: [Z_NOT_EMPTY()]
   }),
   created () {
     this.form.ownerId = this.$store.state.profile.id

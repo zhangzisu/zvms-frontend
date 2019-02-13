@@ -13,7 +13,6 @@ import Axios from 'axios'
 import dialogs from '../../../utils/dialogs'
 
 export default {
-  name: 'chanceItem',
   props: ['id', 'item', 'state'],
   methods: {
     async remove () {
