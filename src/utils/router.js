@@ -6,6 +6,7 @@ import admin from '../views/admin.vue'
 import error404 from '../views/error404.vue'
 import * as activity from '../views/activity'
 import * as user from '../views/user'
+import * as group from '../views/group'
 import store from './store'
 
 Vue.use(Router)
@@ -45,6 +46,11 @@ export default new Router({
     {
       path: '/users/create',
       component: user.create
+    },
+    // 班级
+    {
+      path: '/groups',
+      component: group.list
     },
     // 登录
     {

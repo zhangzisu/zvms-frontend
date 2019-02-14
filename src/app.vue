@@ -11,6 +11,9 @@
         <v-list-tile to="/users">
           <v-list-tile-content>用户列表</v-list-tile-content>
         </v-list-tile>
+        <v-list-tile to="/groups">
+          <v-list-tile-content>班级列表</v-list-tile-content>
+        </v-list-tile>
         <v-list-tile to="/my">
           <v-list-tile-content>个人中心</v-list-tile-content>
         </v-list-tile>
