@@ -54,7 +54,7 @@ export default {
     id: {
       immediate: true,
       handler () {
-        this.addForm.activityId = this.id
+        this.addForm.activityId = parseInt(this.id)
       }
     }
   },

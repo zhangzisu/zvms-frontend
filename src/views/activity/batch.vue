@@ -37,7 +37,7 @@ export default {
   }),
   methods: {
     async apply () {
-      let updateUrl = this.tid ? `/activities/${this.id}/teams/${this.tid}/members` : `/activities/${this.id}/members`
+      let updateUrl = this.tid ? `/teams/${this.tid}/members` : `/activities/${this.id}/members`
       this.$store.commit('loading', true)
       try {
         const { data: { s, p } } = await Axios.put(updateUrl, this.form)
